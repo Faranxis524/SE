@@ -1,0 +1,43 @@
+@startuml Use Case Diagram
+
+actor User
+actor Admin
+
+usecase "Authenticate" as UC0
+
+usecase "View Home" as UC1
+usecase "View Products" as UC2
+usecase "View Blogs" as UC3
+usecase "View Gallery" as UC4
+usecase "View Campaigns" as UC5
+usecase "View About" as UC6
+usecase "Make Donation" as UC7
+
+usecase "Manage Videos" as UC9
+usecase "Manage Blogs" as UC10
+usecase "Manage Products" as UC11
+usecase "Manage Gallery" as UC12
+usecase "Manage Campaigns" as UC13
+usecase "Manage Donations" as UC14
+usecase "Manage About" as UC15
+usecase "Manage Admin Dashboard" as UC16
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+
+Admin --> UC0
+Admin --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+
+@enduml

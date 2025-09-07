@@ -1,0 +1,62 @@
+@startuml Sequence Diagram - Admin Manages Videos
+
+actor Admin
+participant Frontend
+participant API
+participant Database
+
+Admin -> Frontend: Login to admin panel
+Frontend -> API: POST /login (credentials)
+API -> Database: Verify admin credentials
+Database --> API: Admin authenticated
+API --> Frontend: Return token
+
+Admin -> Frontend: Navigate to Manage Videos
+Frontend -> API: GET /videos
+API -> Database: SELECT * FROM videos
+Database --> API: Videos data
+API --> Frontend: Videos list
+
+Admin -> Frontend: Click Add Video
+Frontend -> Frontend: Show form
+
+Admin -> Frontend: Submit video form (title, url, description)
+Frontend -> API: POST /videos (video data)
+API -> Database: INSERT INTO videos
+Database --> API: Video created
+API --> Frontend: Success response
+
+Frontend -> API: GET /videos (refresh list)
+API -> Database: SELECT * FROM videos
+Database --> API: Updated videos data
+API --> Frontend: Updated videos list
+
+Admin -> Frontend: Select video to edit
+Frontend -> Frontend: Populate form
+
+Admin -> Frontend: Submit updated video
+Frontend -> API: PUT /videos/{id} (updated data)
+API -> Database: UPDATE videos SET ...
+Database --> API: Video updated
+API --> Frontend: Success response
+
+Frontend -> API: GET /videos (refresh)
+API -> Database: SELECT * FROM videos
+Database --> API: Updated videos data
+API --> Frontend: Updated videos list
+
+Admin -> Frontend: Click Delete on video
+Frontend -> Frontend: Confirm delete
+
+Admin -> Frontend: Confirm delete
+Frontend -> API: DELETE /videos/{id}
+API -> Database: DELETE FROM videos
+Database --> API: Video deleted
+API --> Frontend: Success response
+
+Frontend -> API: GET /videos (refresh)
+API -> Database: SELECT * FROM videos
+Database --> API: Updated videos data
+API --> Frontend: Updated videos list
+
+@enduml

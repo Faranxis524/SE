@@ -1,0 +1,58 @@
+@startuml Sequence Diagram - User Interaction
+
+actor User
+participant Frontend
+participant API
+participant Database
+
+User -> Frontend: Visit website (Home page)
+Frontend -> API: GET /homes
+API -> Database: SELECT * FROM homes
+Database --> API: Home content
+API --> Frontend: Home data
+
+User -> Frontend: Navigate to Products
+Frontend -> API: GET /products
+API -> Database: SELECT * FROM products
+Database --> API: Products list
+API --> Frontend: Products data
+
+User -> Frontend: Click on a product
+Frontend -> Frontend: Display product details
+
+User -> Frontend: Navigate to Gallery
+Frontend -> API: GET /galleries
+API -> Database: SELECT * FROM galleries
+Database --> API: Gallery items
+API --> Frontend: Gallery data
+
+User -> Frontend: Navigate to Blogs/Storytelling
+Frontend -> API: GET /blogs
+API -> Database: SELECT * FROM blogs
+Database --> API: Blogs list
+API --> Frontend: Blogs data
+
+User -> Frontend: Navigate to Campaigns
+Frontend -> API: GET /campaigns
+API -> Database: SELECT * FROM campaigns
+Database --> API: Campaigns list
+API --> Frontend: Campaigns data
+
+User -> Frontend: Navigate to About
+Frontend -> API: GET /abouts
+API -> Database: SELECT * FROM abouts
+Database --> API: About content
+API --> Frontend: About data
+
+User -> Frontend: Decide to make donation
+Frontend -> Frontend: Show donation form
+
+User -> Frontend: Submit donation form (amount, details)
+Frontend -> API: POST /donations (donation data)
+API -> Database: INSERT INTO donations
+Database --> API: Donation created
+API --> Frontend: Success response
+
+Frontend --> User: Show donation confirmation
+
+@enduml

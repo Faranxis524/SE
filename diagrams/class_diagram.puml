@@ -1,0 +1,115 @@
+@startuml Class Diagram
+
+class User {
+  - id: int
+  + makeDonation()
+}
+
+class Admin {
+  - id: int
+  - name: string
+  - email: string
+  - password: string
+  + authenticate()
+  + manageVideos()
+  + manageBlogs()
+  + manageProducts()
+  + manageGallery()
+  + manageCampaign()
+  + manageDonation()
+  + manageAbout()
+  + manageDashboard()
+}
+
+class Video {
+  - id: int
+  - title: string
+  - url: string
+  - description: string
+  + create()
+  + update()
+  + delete()
+}
+
+class Blog {
+  - id: int
+  - title: string
+  - content: string
+  - author: string
+  - image: string
+  + create()
+  + update()
+  + delete()
+}
+
+class Product {
+  - id: int
+  - name: string
+  - description: string
+  - image: string
+  - shopee_link: string
+  + create()
+  + update()
+  + delete()
+}
+
+class Gallery {
+  - id: int
+  - title: string
+  - image: string
+  - description: string
+  + create()
+  + update()
+  + delete()
+}
+
+class Campaign {
+  - id: int
+  - title: string
+  - description: string
+  - goal: float
+  - current_amount: float
+  + create()
+  + update()
+  + delete()
+  + donations()
+}
+
+class Donation {
+  - id: int
+  - amount: float
+  - campaign_id: int
+  + create()
+  + update()
+  + delete()
+  + campaign()
+}
+
+class Home {
+  - id: int
+  - content: string
+}
+
+class About {
+  - id: int
+  - content: string
+}
+
+Campaign "1" o-- "many" Donation : hasMany
+Donation --> Campaign : belongsTo
+Admin --> Video : manages
+Admin --> Blog : manages
+Admin --> Product : manages
+Admin --> Gallery : manages
+Admin --> Campaign : manages
+Admin --> Donation : manages
+Admin --> About : manages
+User --> Home : views
+User --> About : views
+User --> Product : views
+User --> Gallery : views
+User --> Campaign : views
+User --> Video : views
+User --> Blog : views
+
+@enduml
