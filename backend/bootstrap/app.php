@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleCors::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
         ]);
+        $middleware->api(append: [
+            \App\Http\Middleware\HandleCors::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

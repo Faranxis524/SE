@@ -1,13 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import NavigationBar from './Navbar';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 const About = () => {
   return (
     <div>
-      <NavigationBar />
-
       <Container fluid className="py-5">
         <Row className="justify-content-center mb-5">
           <Col lg={8}>
@@ -56,7 +52,7 @@ const About = () => {
                         Every purchase supports our artisans and helps maintain the delicate balance
                         between tradition and innovation in our weaving community.
                       </p>
-                      <Button as={Link} to="/products" variant="primary" size="lg" className="mt-3" style={{ background: 'linear-gradient(135deg, #800000 0%, #a52a2a 100%)', border: 'none' }}>
+                      <Button onClick={() => document.getElementById('products').scrollIntoView({ behavior: 'smooth' })} variant="primary" size="lg" className="mt-3" style={{ background: 'linear-gradient(135deg, #800000 0%, #a52a2a 100%)', border: 'none', cursor: 'pointer' }}>
                         Explore Our Products
                       </Button>
                     </div>
@@ -67,12 +63,6 @@ const About = () => {
           </Col>
         </Row>
       </Container>
-
-      <footer className="bg-dark text-light text-center py-4 mt-5">
-        <Container>
-          <p className="mb-0">&copy; 2023 Cordillera Indigenous Weaving. All rights reserved.</p>
-        </Container>
-      </footer>
     </div>
   );
 };

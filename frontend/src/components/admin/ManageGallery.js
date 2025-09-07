@@ -5,7 +5,7 @@ import { Container, Row, Col, Navbar, Nav, Button, Card, Form, Alert } from 'rea
 
 const ManageGallery = () => {
   const [galleries, setGalleries] = useState([]);
-  const [formData, setFormData] = useState({ title: '', description: '', image: null });
+  const [formData, setFormData] = useState({ title: '', description: '', image: '' });
   const [editingId, setEditingId] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -23,30 +23,21 @@ const ManageGallery = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    data.append('title', formData.title);
-    data.append('description', formData.description);
-    data.append('_method', editingId ? 'PUT' : 'POST'); // Method spoofing for Laravel
-    if (formData.image) {
-      data.append('image', formData.image);
-    }
-
-    const config = {
-      headers: { 'Content-Type': 'multipart/form-data' }
+    const data = {
+      title: formData.title,
+      description: formData.description,
+      image: formData.image,
     };
 
     if (editingId) {
-      axios.post(`http://127.0.0.1:8000/api/galleries/${editingId}`, data, config)
+      axios.put(`http://127.0.0.1:8000/api/galleries/${editingId}`, data)
         .then((response) => {
           console.log('Gallery updated:', response.data);
           fetchGalleries();
-          setFormData({ title: '', description: '', image: null });
+          setFormData({ title: '', description: '', image: '' });
           setEditingId(null);
           setAlertMessage('Gallery image updated successfully!');
           setShowAlert(true);
-          // Clear file input
-          const fileInput = document.querySelector('input[type="file"]');
-          if (fileInput) fileInput.value = '';
         })
         .catch(error => {
           console.error('Error updating gallery:', error);
@@ -54,16 +45,13 @@ const ManageGallery = () => {
           setShowAlert(true);
         });
     } else {
-      axios.post('http://127.0.0.1:8000/api/galleries', data, config)
+      axios.post('http://127.0.0.1:8000/api/galleries', data)
         .then((response) => {
           console.log('Gallery created:', response.data);
           fetchGalleries();
-          setFormData({ title: '', description: '', image: null });
+          setFormData({ title: '', description: '', image: '' });
           setAlertMessage('Gallery image added successfully!');
           setShowAlert(true);
-          // Clear file input
-          const fileInput = document.querySelector('input[type="file"]');
-          if (fileInput) fileInput.value = '';
         })
         .catch(error => {
           console.error('Error adding gallery:', error);
@@ -77,7 +65,7 @@ const ManageGallery = () => {
     setFormData({
       title: gallery.title,
       description: gallery.description,
-      image: null // Keep as null for file input, existing image will be preserved
+      image: gallery.image || '' // Use existing image URL
     });
     setEditingId(gallery.id);
   };
@@ -98,9 +86,6 @@ const ManageGallery = () => {
     }
   };
 
-  const handleImageChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
-  };
 
   return (
     <div>
@@ -110,12 +95,12 @@ const ManageGallery = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/admin">Dashboard</Nav.Link>
-              <Nav.Link as={Link} to="/admin/videos">Manage Videos</Nav.Link>
-              <Nav.Link as={Link} to="/admin/blogs">Manage Blogs</Nav.Link>
-              <Nav.Link as={Link} to="/admin/products">Manage Products</Nav.Link>
-              <Nav.Link as={Link} to="/admin/gallery">Manage Gallery</Nav.Link>
-              <Nav.Link as={Link} to="/">Back to Site</Nav.Link>
+              <Nav.Link as={Link} to="/admin" style={{ color: '#f5f5dc' }}>Dashboard</Nav.Link>
+              <Nav.Link as={Link} to="/admin/videos" style={{ color: '#f5f5dc' }}>Manage Videos</Nav.Link>
+              <Nav.Link as={Link} to="/admin/blogs" style={{ color: '#f5f5dc' }}>Manage Blogs</Nav.Link>
+              <Nav.Link as={Link} to="/admin/products" style={{ color: '#f5f5dc' }}>Manage Products</Nav.Link>
+              <Nav.Link as={Link} to="/admin/gallery" style={{ color: '#f5f5dc' }}>Manage Gallery</Nav.Link>
+              <Nav.Link as={Link} to="/" style={{ color: '#f5f5dc' }}>Back to Site</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -163,11 +148,12 @@ const ManageGallery = () => {
                     />
                   </Form.Group>
                   <Form.Group className="mb-4">
-                    <Form.Label style={{ color: '#800000' }}>Gallery Image</Form.Label>
+                    <Form.Label style={{ color: '#800000' }}>Image URL</Form.Label>
                     <Form.Control
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
+                      type="url"
+                      placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
+                      value={formData.image}
+                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                       required={!editingId} // Required only for new images
                       style={{ background: '#f5f5dc', border: '2px solid #daa520', color: '#800000' }}
                     />
@@ -184,10 +170,7 @@ const ManageGallery = () => {
                     {editingId && (
                       <Button type="button" variant="secondary" size="lg" onClick={() => {
                         setEditingId(null);
-                        setFormData({ title: '', description: '', image: null });
-                        // Clear file input
-                        const fileInput = document.querySelector('input[type="file"]');
-                        if (fileInput) fileInput.value = '';
+                        setFormData({ title: '', description: '', image: '' });
                       }} style={{ background: '#daa520', border: 'none', color: '#800000' }}>
                         Cancel
                       </Button>
@@ -212,7 +195,7 @@ const ManageGallery = () => {
                         <Card.Text style={{ color: '#a52a2a', fontSize: '0.9rem' }}>{gallery.description}</Card.Text>
                       )}
                       {gallery.image && (
-                        <Card.Img variant="top" src={`http://127.0.0.1:8000/storage/${gallery.image}`} alt={gallery.title} className="img-fluid mb-3 rounded" style={{ border: '2px solid #daa520', maxHeight: '200px', objectFit: 'cover' }} onError={(e) => { e.target.src = '/placeholder-image.png'; e.target.alt = 'Image not available'; }} />
+                        <Card.Img variant="top" src={gallery.image} alt={gallery.title} className="img-fluid mb-3 rounded" style={{ border: '2px solid #daa520', maxHeight: '200px', objectFit: 'cover' }} onError={(e) => { e.target.src = '/placeholder-image.png'; e.target.alt = 'Image not available'; }} />
                       )}
                     </Card.Body>
                     <Card.Footer className="bg-transparent border-0 d-flex justify-content-center gap-2">
@@ -230,12 +213,6 @@ const ManageGallery = () => {
           </Col>
         </Row>
       </Container>
-
-      <footer className="bg-dark text-light text-center py-4 mt-5">
-        <Container>
-          <p className="mb-0">&copy; 2023 Cordillera Indigenous Weaving Admin</p>
-        </Container>
-      </footer>
     </div>
   );
 };

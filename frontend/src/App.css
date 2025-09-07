@@ -185,6 +185,14 @@ footer {
   margin-top: 3rem;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+.App {
+  min-height: 100vh;
+}
+
 @media (max-width: 768px) {
   nav ul {
     flex-direction: column;

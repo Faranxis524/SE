@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import NavigationBar from './Navbar';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 
 const Fundraising = () => {
@@ -21,8 +20,6 @@ const Fundraising = () => {
 
   return (
     <div>
-      <NavigationBar />
-
       <Container fluid className="py-5">
         <Row className="justify-content-center mb-5">
           <Col lg={8}>
@@ -97,12 +94,6 @@ const Fundraising = () => {
           </Col>
         </Row>
       </Container>
-
-      <footer className="bg-dark text-light text-center py-4 mt-5">
-        <Container>
-          <p className="mb-0">&copy; 2023 Cordillera Indigenous Weaving. All rights reserved.</p>
-        </Container>
-      </footer>
     </div>
   );
 };

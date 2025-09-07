@@ -24,18 +24,11 @@ class GalleryController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|url',
             'description' => 'nullable|string',
         ]);
 
-        $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('galleries', 'public');
-            $data['image'] = $imagePath;
-        }
-
-        return Gallery::create($data);
+        return Gallery::create($request->all());
     }
 
     /**
@@ -53,23 +46,12 @@ class GalleryController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|url',
             'description' => 'nullable|string',
         ]);
 
         $gallery = Gallery::findOrFail($id);
-        $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($gallery->image) {
-                Storage::disk('public')->delete($gallery->image);
-            }
-            $imagePath = $request->file('image')->store('galleries', 'public');
-            $data['image'] = $imagePath;
-        }
-
-        $gallery->update($data);
+        $gallery->update($request->all());
         return $gallery;
     }
 
@@ -78,14 +60,7 @@ class GalleryController extends Controller
      */
     public function destroy(string $id)
     {
-        $gallery = Gallery::findOrFail($id);
-
-        // Delete image file if exists
-        if ($gallery->image) {
-            Storage::disk('public')->delete($gallery->image);
-        }
-
-        $gallery->delete();
+        Gallery::destroy($id);
         return response()->noContent();
     }
 }

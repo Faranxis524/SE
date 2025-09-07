@@ -1,9 +1,16 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
 const NavigationBar = () => {
   const navigate = useNavigate();
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleAdminLogin = () => {
     const password = prompt('Enter admin password:');
@@ -27,13 +34,13 @@ const NavigationBar = () => {
     >
       <Container fluid>
         <Navbar.Brand
-          as={Link}
-          to="/"
+          onClick={() => scrollToSection('home')}
           className="fw-bold fs-4 d-flex align-items-center"
           style={{
             color: '#f5f5dc',
             textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-            fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+            fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+            cursor: 'pointer'
           }}
         >
           <span className="me-2" style={{ fontSize: '1.5rem' }}>🧵</span>
@@ -50,8 +57,7 @@ const NavigationBar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
             <Nav.Link
-              as={Link}
-              to="/"
+              onClick={() => scrollToSection('home')}
               className="mx-2 fw-semibold"
               style={{
                 color: '#f5f5dc',
@@ -59,7 +65,8 @@ const NavigationBar = () => {
                 padding: '0.75rem 1rem',
                 borderRadius: '25px',
                 transition: 'all 0.3s ease',
-                position: 'relative'
+                position: 'relative',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = 'rgba(218, 165, 32, 0.2)';
@@ -74,15 +81,15 @@ const NavigationBar = () => {
             </Nav.Link>
 
             <Nav.Link
-              as={Link}
-              to="/products"
+              onClick={() => scrollToSection('products')}
               className="mx-2 fw-semibold"
               style={{
                 color: '#f5f5dc',
                 textDecoration: 'none',
                 padding: '0.75rem 1rem',
                 borderRadius: '25px',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = 'rgba(218, 165, 32, 0.2)';
@@ -97,15 +104,15 @@ const NavigationBar = () => {
             </Nav.Link>
 
             <Nav.Link
-              as={Link}
-              to="/storytelling"
+              onClick={() => scrollToSection('storytelling')}
               className="mx-2 fw-semibold"
               style={{
                 color: '#f5f5dc',
                 textDecoration: 'none',
                 padding: '0.75rem 1rem',
                 borderRadius: '25px',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = 'rgba(218, 165, 32, 0.2)';
@@ -120,15 +127,15 @@ const NavigationBar = () => {
             </Nav.Link>
 
             <Nav.Link
-              as={Link}
-              to="/campaigns"
+              onClick={() => scrollToSection('campaigns')}
               className="mx-2 fw-semibold"
               style={{
                 color: '#f5f5dc',
                 textDecoration: 'none',
                 padding: '0.75rem 1rem',
                 borderRadius: '25px',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = 'rgba(218, 165, 32, 0.2)';
@@ -143,15 +150,15 @@ const NavigationBar = () => {
             </Nav.Link>
 
             <Nav.Link
-              as={Link}
-              to="/gallery"
+              onClick={() => scrollToSection('gallery')}
               className="mx-2 fw-semibold"
               style={{
                 color: '#f5f5dc',
                 textDecoration: 'none',
                 padding: '0.75rem 1rem',
                 borderRadius: '25px',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = 'rgba(218, 165, 32, 0.2)';
@@ -166,15 +173,15 @@ const NavigationBar = () => {
             </Nav.Link>
 
             <Nav.Link
-              as={Link}
-              to="/about"
+              onClick={() => scrollToSection('about')}
               className="mx-2 fw-semibold"
               style={{
                 color: '#f5f5dc',
                 textDecoration: 'none',
                 padding: '0.75rem 1rem',
                 borderRadius: '25px',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = 'rgba(218, 165, 32, 0.2)';

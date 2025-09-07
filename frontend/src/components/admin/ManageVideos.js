@@ -81,11 +81,11 @@ const ManageVideos = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/admin">Dashboard</Nav.Link>
-              <Nav.Link as={Link} to="/admin/videos">Manage Videos</Nav.Link>
-              <Nav.Link as={Link} to="/admin/blogs">Manage Blogs</Nav.Link>
-              <Nav.Link as={Link} to="/admin/products">Manage Products</Nav.Link>
-              <Nav.Link as={Link} to="/">Back to Site</Nav.Link>
+              <Nav.Link as={Link} to="/admin" style={{ color: '#f5f5dc' }}>Dashboard</Nav.Link>
+              <Nav.Link as={Link} to="/admin/videos" style={{ color: '#f5f5dc' }}>Manage Videos</Nav.Link>
+              <Nav.Link as={Link} to="/admin/blogs" style={{ color: '#f5f5dc' }}>Manage Blogs</Nav.Link>
+              <Nav.Link as={Link} to="/admin/products" style={{ color: '#f5f5dc' }}>Manage Products</Nav.Link>
+              <Nav.Link as={Link} to="/" style={{ color: '#f5f5dc' }}>Back to Site</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -188,12 +188,6 @@ const ManageVideos = () => {
           </Col>
         </Row>
       </Container>
-
-      <footer className="bg-dark text-light text-center py-4 mt-5">
-        <Container>
-          <p className="mb-0">&copy; 2023 Cordillera Indigenous Weaving Admin</p>
-        </Container>
-      </footer>
     </div>
   );
 };

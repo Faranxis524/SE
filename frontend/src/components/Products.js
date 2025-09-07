@@ -1,30 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import NavigationBar from './Navbar';
-import axios from 'axios';
+import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
-const Products = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/products')
-      .then(response => {
-        setProducts(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-        // Fallback to static data
-        setProducts([
-          { id: 1, name: 'Traditional Blanket', description: 'Handwoven blanket with indigenous patterns.', shopee_link: 'https://shopee.ph/product/1' },
-          { id: 2, name: 'Wall Hanging', description: 'Beautiful wall art from Cordillera weavers.', shopee_link: 'https://shopee.ph/product/2' },
-          { id: 3, name: 'Bag', description: 'Stylish woven bag for everyday use.', shopee_link: 'https://shopee.ph/product/3' }
-        ]);
-      });
-  }, []);
-
+const Products = ({ products }) => {
   return (
     <div>
-      <NavigationBar />
       <Container fluid className="py-5">
         <Row className="justify-content-center mb-5">
           <Col lg={10}>
@@ -45,7 +24,7 @@ const Products = () => {
                     </Card.Body>
                     <Card.Footer className="bg-transparent border-0 d-flex justify-content-center">
                       <Button as="a" href={product.shopee_link} target="_blank" rel="noopener noreferrer" variant="primary" style={{ background: 'linear-gradient(135deg, #800000 0%, #a52a2a 100%)', border: 'none' }}>
-                        Buy on Shopee
+                        Buy this product
                       </Button>
                     </Card.Footer>
                   </Card>
@@ -55,12 +34,6 @@ const Products = () => {
           </Col>
         </Row>
       </Container>
-
-      <footer className="bg-dark text-light text-center py-4 mt-5">
-        <Container>
-          <p className="mb-0">&copy; 2023 Cordillera Indigenous Weaving. All rights reserved.</p>
-        </Container>
-      </footer>
     </div>
   );
 };

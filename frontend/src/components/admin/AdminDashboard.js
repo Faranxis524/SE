@@ -1,42 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Navbar, Nav, Button, Card, NavDropdown } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ onLogout }) => {
+
   return (
     <div>
-      <Navbar bg="light" variant="light" expand="lg" className="border-bottom shadow-sm px-3" style={{ background: 'linear-gradient(135deg, #f5f5dc 0%, #fff8dc 100%)' }}>
-        <Container fluid>
-          <Navbar.Brand href="#admin" className="fw-bold" style={{ color: '#800000', fontSize: '1.5rem' }}>
-            🛠️ Admin Dashboard
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="admin-navbar-nav" />
-          <Navbar.Collapse id="admin-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as={Link} to="/admin" className="fw-semibold" style={{ color: '#800000' }}>Dashboard</Nav.Link>
-              <NavDropdown title="Content Management" id="content-dropdown" className="fw-semibold" style={{ color: '#800000' }}>
-                <NavDropdown.Item as={Link} to="/admin/videos">📹 Manage Videos</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/admin/blogs">📝 Manage Blogs</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/admin/products">🛍️ Manage Products</NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown title="Site Management" id="site-dropdown" className="fw-semibold" style={{ color: '#800000' }}>
-                <NavDropdown.Item as={Link} to="/admin/gallery">🖼️ Manage Gallery</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-            <Nav>
+      <Container fluid className="py-5" style={{ background: 'linear-gradient(135deg, #f5f5dc 0%, #fff 100%)', minHeight: '80vh' }}>
+        <Row className="justify-content-center mb-4">
+          <Col lg={10}>
+            <div className="d-flex justify-content-between align-items-center">
+              <h1 className="display-4" style={{ color: '#800000' }}>🛠️ Admin Dashboard</h1>
               <Button variant="outline-danger" onClick={() => {
                 if (window.confirm('Are you sure you want to logout?')) {
-                  window.location.href = '/';
+                  onLogout();
                 }
               }}>
                 🚪 Logout
               </Button>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
-      <Container fluid className="py-5" style={{ background: 'linear-gradient(135deg, #f5f5dc 0%, #fff 100%)', minHeight: '80vh' }}>
+            </div>
+          </Col>
+        </Row>
         <Row className="justify-content-center">
           <Col lg={10}>
             <div className="text-center mb-5">
@@ -100,12 +84,6 @@ const AdminDashboard = () => {
           </Col>
         </Row>
       </Container>
-
-      <footer className="bg-light text-center py-4 border-top" style={{ background: 'linear-gradient(135deg, #f5f5dc 0%, #e6e6fa 100%)', borderTop: '2px solid #daa520' }}>
-        <Container>
-          <p className="mb-0" style={{ color: '#800000' }}>&copy; 2023 Cordillera Indigenous Weaving Admin Panel</p>
-        </Container>
-      </footer>
     </div>
   );
 };

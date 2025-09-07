@@ -1,38 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import NavigationBar from './Navbar';
-import axios from 'axios';
+import React from 'react';
 import { Container, Row, Col, Card, Ratio } from 'react-bootstrap';
 
-const Storytelling = () => {
-  const [videos, setVideos] = useState([]);
-  const [blogs, setBlogs] = useState([]);
-
-  useEffect(() => {
-    fetchVideos();
-    fetchBlogs();
-  }, []);
-
-  const fetchVideos = () => {
-    axios.get('http://127.0.0.1:8000/api/videos')
-      .then(response => setVideos(response.data))
-      .catch(error => console.error('Error fetching videos:', error));
-  };
-
-  const fetchBlogs = () => {
-    axios.get('http://127.0.0.1:8000/api/blogs')
-      .then(response => setBlogs(response.data))
-      .catch(error => console.error('Error fetching blogs:', error));
-  };
-
+const Storytelling = ({ videos, blogs }) => {
   const getYouTubeEmbedUrl = (url) => {
-    const videoId = url.split('v=')[1]?.split('&')[0];
-    return `https://www.youtube.com/embed/${videoId}`;
+    if (!url) return '';
+
+    // Handle different YouTube URL formats
+    let videoId = '';
+
+    if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1]?.split('?')[0]?.split('&')[0];
+    } else if (url.includes('youtube.com/watch?v=')) {
+      videoId = url.split('v=')[1]?.split('&')[0];
+    } else if (url.includes('youtube.com/embed/')) {
+      videoId = url.split('embed/')[1]?.split('?')[0]?.split('&')[0];
+    }
+
+    if (!videoId) {
+      console.warn('Could not extract video ID from URL:', url);
+      return '';
+    }
+
+    const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&enablejsapi=1`;
+    console.log('YouTube embed URL:', embedUrl);
+    return embedUrl;
+  };
+
+  const truncateContent = (content, maxLength = 150) => {
+    if (content.length <= maxLength) return content;
+    return content.substring(0, maxLength) + '...';
+  };
+
+  const handleBlogClick = (blogUrl) => {
+    if (blogUrl) {
+      window.open(blogUrl, '_blank');
+    }
   };
 
   return (
     <div>
-      <NavigationBar />
-
       <Container fluid className="py-5">
         <Row className="justify-content-center mb-5">
           <Col lg={10}>
@@ -49,12 +55,28 @@ const Storytelling = () => {
                       <Card.Text style={{ color: '#a52a2a' }}>{video.description}</Card.Text>
                     </Card.Body>
                     <Ratio aspectRatio="16x9">
-                      <iframe
-                        src={getYouTubeEmbedUrl(video.url)}
-                        title={video.title}
-                        allowFullScreen
-                        className="rounded"
-                      />
+                      {getYouTubeEmbedUrl(video.url) ? (
+                        <iframe
+                          src={getYouTubeEmbedUrl(video.url)}
+                          title={video.title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          loading="lazy"
+                          className="rounded"
+                          style={{ border: 'none', width: '100%', height: '100%' }}
+                        />
+                      ) : (
+                        <div
+                          className="d-flex align-items-center justify-content-center bg-dark text-white rounded"
+                          style={{ width: '100%', height: '100%' }}
+                        >
+                          <div className="text-center">
+                            <div className="fs-1 mb-2">🎥</div>
+                            <p className="mb-2">Video Unavailable</p>
+                            <small>Invalid YouTube URL</small>
+                          </div>
+                        </div>
+                      )}
                     </Ratio>
                   </Card>
                 </Col>
@@ -74,11 +96,37 @@ const Storytelling = () => {
                 <Row>
                   {blogs.map(blog => (
                     <Col md={6} lg={4} className="mb-4" key={blog.id}>
-                      <Card className="h-100 border-0" style={{ background: '#f5f5dc', border: '2px solid #daa520' }}>
+                      <Card
+                        className="h-100 border-0"
+                        style={{
+                          background: '#f5f5dc',
+                          border: '2px solid #daa520',
+                          cursor: blog.blog_url ? 'pointer' : 'default',
+                          transition: 'transform 0.2s'
+                        }}
+                        onClick={() => handleBlogClick(blog.blog_url)}
+                        onMouseEnter={(e) => {
+                          if (blog.blog_url) {
+                            e.currentTarget.style.transform = 'scale(1.02)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (blog.blog_url) {
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }
+                        }}
+                      >
                         <Card.Body>
                           <Card.Title style={{ color: '#800000' }}>{blog.title}</Card.Title>
                           <Card.Text style={{ color: '#a52a2a', fontStyle: 'italic' }}>By: {blog.author}</Card.Text>
-                          <Card.Text style={{ color: '#a52a2a' }}>{blog.content}</Card.Text>
+                          <Card.Text style={{ color: '#a52a2a' }}>
+                            {truncateContent(blog.content)}
+                            {blog.content.length > 150 && (
+                              <span style={{ color: '#daa520', fontWeight: 'bold', marginLeft: '5px' }}>
+                                {blog.blog_url ? 'Read More' : ''}
+                              </span>
+                            )}
+                          </Card.Text>
                         </Card.Body>
                         {blog.image && (
                           <Card.Img variant="bottom" src={blog.image} alt={blog.title} className="img-fluid rounded-bottom" style={{ borderTop: '2px solid #daa520' }} />
@@ -92,12 +140,6 @@ const Storytelling = () => {
           </Col>
         </Row>
       </Container>
-
-      <footer className="bg-dark text-light text-center py-4 mt-5">
-        <Container>
-          <p className="mb-0">&copy; 2023 Cordillera Indigenous Weaving. All rights reserved.</p>
-        </Container>
-      </footer>
     </div>
   );
 };

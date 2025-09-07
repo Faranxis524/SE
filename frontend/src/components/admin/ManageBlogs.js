@@ -5,7 +5,7 @@ import { Container, Row, Col, Navbar, Nav, Button, Card, Form, Alert } from 'rea
 
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
-  const [formData, setFormData] = useState({ title: '', content: '', author: '', image: '' });
+  const [formData, setFormData] = useState({ title: '', content: '', author: '', image: '', blog_url: '' });
   const [editingId, setEditingId] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -26,7 +26,7 @@ const ManageBlogs = () => {
       axios.put(`http://127.0.0.1:8000/api/blogs/${editingId}`, formData)
         .then(() => {
           fetchBlogs();
-          setFormData({ title: '', content: '', author: '', image: '' });
+          setFormData({ title: '', content: '', author: '', image: '', blog_url: '' });
           setEditingId(null);
           setAlertMessage('Blog updated successfully!');
           setShowAlert(true);
@@ -40,7 +40,7 @@ const ManageBlogs = () => {
       axios.post('http://127.0.0.1:8000/api/blogs', formData)
         .then(() => {
           fetchBlogs();
-          setFormData({ title: '', content: '', author: '', image: '' });
+          setFormData({ title: '', content: '', author: '', image: '', blog_url: '' });
           setAlertMessage('Blog added successfully!');
           setShowAlert(true);
         })
@@ -53,7 +53,7 @@ const ManageBlogs = () => {
   };
 
   const handleEdit = (blog) => {
-    setFormData({ title: blog.title, content: blog.content, author: blog.author, image: blog.image });
+    setFormData({ title: blog.title, content: blog.content, author: blog.author, image: blog.image, blog_url: blog.blog_url || '' });
     setEditingId(blog.id);
   };
 
@@ -81,11 +81,11 @@ const ManageBlogs = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/admin">Dashboard</Nav.Link>
-              <Nav.Link as={Link} to="/admin/videos">Manage Videos</Nav.Link>
-              <Nav.Link as={Link} to="/admin/blogs">Manage Blogs</Nav.Link>
-              <Nav.Link as={Link} to="/admin/products">Manage Products</Nav.Link>
-              <Nav.Link as={Link} to="/">Back to Site</Nav.Link>
+              <Nav.Link as={Link} to="/admin" style={{ color: '#f5f5dc' }}>Dashboard</Nav.Link>
+              <Nav.Link as={Link} to="/admin/videos" style={{ color: '#f5f5dc' }}>Manage Videos</Nav.Link>
+              <Nav.Link as={Link} to="/admin/blogs" style={{ color: '#f5f5dc' }}>Manage Blogs</Nav.Link>
+              <Nav.Link as={Link} to="/admin/products" style={{ color: '#f5f5dc' }}>Manage Products</Nav.Link>
+              <Nav.Link as={Link} to="/" style={{ color: '#f5f5dc' }}>Back to Site</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -144,7 +144,7 @@ const ManageBlogs = () => {
                       style={{ background: '#f5f5dc', border: '2px solid #daa520', color: '#800000' }}
                     />
                   </Form.Group>
-                  <Form.Group className="mb-4">
+                  <Form.Group className="mb-3">
                     <Form.Label style={{ color: '#800000' }}>Image URL (optional)</Form.Label>
                     <Form.Control
                       type="url"
@@ -154,12 +154,25 @@ const ManageBlogs = () => {
                       style={{ background: '#f5f5dc', border: '2px solid #daa520', color: '#800000' }}
                     />
                   </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label style={{ color: '#800000' }}>Blog URL (optional)</Form.Label>
+                    <Form.Control
+                      type="url"
+                      placeholder="Enter full blog URL for redirection"
+                      value={formData.blog_url}
+                      onChange={(e) => setFormData({ ...formData, blog_url: e.target.value })}
+                      style={{ background: '#f5f5dc', border: '2px solid #daa520', color: '#800000' }}
+                    />
+                    <Form.Text className="text-muted" style={{ color: '#a52a2a' }}>
+                      Users will be redirected to this URL when they click "Read More"
+                    </Form.Text>
+                  </Form.Group>
                   <div className="d-flex justify-content-center gap-3">
                     <Button type="submit" variant="primary" size="lg" style={{ background: 'linear-gradient(135deg, #800000 0%, #a52a2a 100%)', border: 'none' }}>
                       {editingId ? 'Update Blog' : 'Add Blog'}
                     </Button>
                     {editingId && (
-                      <Button type="button" variant="secondary" size="lg" onClick={() => { setEditingId(null); setFormData({ title: '', content: '', author: '', image: '' }); }} style={{ background: '#daa520', border: 'none', color: '#800000' }}>
+                      <Button type="button" variant="secondary" size="lg" onClick={() => { setEditingId(null); setFormData({ title: '', content: '', author: '', image: '', blog_url: '' }); }} style={{ background: '#daa520', border: 'none', color: '#800000' }}>
                         Cancel
                       </Button>
                     )}
@@ -200,12 +213,6 @@ const ManageBlogs = () => {
           </Col>
         </Row>
       </Container>
-
-      <footer className="bg-dark text-light text-center py-4 mt-5">
-        <Container>
-          <p className="mb-0">&copy; 2023 Cordillera Indigenous Weaving Admin</p>
-        </Container>
-      </footer>
     </div>
   );
 };
